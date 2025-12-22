@@ -35,9 +35,6 @@ public class Ticket {
 
     public Ticket() {}
 
-    // --- FIXED GETTERS AND SETTERS ---
-
-    // Fixed: Return Long, not Object. Return the field, don't throw exception.
     public Long getId() {
         return id;
     }
@@ -46,7 +43,6 @@ public class Ticket {
         this.id = id;
     }
 
-    // Fixed: Return String, not Object. This fixes the .equalsIgnoreCase() error.
     public String getSubject() {
         return subject;
     }
@@ -55,7 +51,6 @@ public class Ticket {
         this.subject = subject;
     }
 
-    // Fixed: Implemented the method
     public String getDescription() {
         return description;
     }
@@ -64,7 +59,6 @@ public class Ticket {
         this.description = description;
     }
 
-    // --- MISSING ACCESSORS ADDED BELOW ---
 
     public User getUser() {
         return user;

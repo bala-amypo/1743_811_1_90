@@ -13,10 +13,8 @@ public class DuplicateRule {
     @Column(unique = true, nullable = false)
     private String ruleName;
 
-    // Based on your earlier service code, you use "EXACT_MATCH" or "SIMILARITY"
     private String matchType;
 
-    // Based on your service code validation (0 to 1)
     private Double threshold;
 
     public DuplicateRule() {}
@@ -27,8 +25,6 @@ public class DuplicateRule {
         this.threshold = threshold;
     }
 
-    // --- GETTERS AND SETTERS ---
-
     public Long getId() {
         return id;
     }
@@ -37,7 +33,6 @@ public class DuplicateRule {
         this.id = id;
     }
 
-    // Fixed: Added this method to resolve the error
     public String getRuleName() {
         return ruleName;
     }
