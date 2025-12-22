@@ -30,14 +30,11 @@ public class DuplicateDetectionLog {
 
     public DuplicateDetectionLog() {}
 
-    // Convenience constructor
     public DuplicateDetectionLog(Ticket ticket, Ticket matchedTicket, Double matchScore) {
         this.ticket = ticket;
         this.matchedTicket = matchedTicket;
         this.matchScore = matchScore;
     }
-
-    // --- ADDED GETTERS AND SETTERS BELOW ---
 
     public Long getId() {
         return id;
