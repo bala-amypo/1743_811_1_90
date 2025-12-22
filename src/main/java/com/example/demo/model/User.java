@@ -18,14 +18,11 @@ public class User {
 
     private String password;
 
-    // Initialize default value directly
     private String role = "USER"; 
 
-    // FIXED: Added annotations to prevent null errors and updates
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // This method runs automatically before saving to DB
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {
@@ -37,8 +34,6 @@ public class User {
     }
 
     public User() {}
-
-    // --- Getters and Setters ---
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

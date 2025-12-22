@@ -11,6 +11,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByUser_Id(Long id);
     List<Ticket> findByStatus(String status);
     
-    // Required for keyword-based duplicate searching
     List<Ticket> findBySubjectContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String subject, String description);
 }
