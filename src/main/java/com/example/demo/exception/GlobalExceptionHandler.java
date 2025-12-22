@@ -10,7 +10,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handles ResourceNotFoundException (404 Not Found)
+    
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(ResourceNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
@@ -18,8 +18,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    // Handles IllegalArgumentException (400 Bad Request)
-    // Used for validation failures (email exists, description too short, etc.)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleValidation(IllegalArgumentException ex) {
         Map<String, String> error = new HashMap<>();
@@ -27,7 +25,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // Handles any other internal errors (500 Internal Server Error)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneralException(Exception ex) {
         Map<String, String> error = new HashMap<>();
