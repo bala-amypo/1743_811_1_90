@@ -1,8 +1,10 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "duplicate_detection_log")
 public class DuplicateDetectionLog {
 
     @Id
@@ -10,11 +12,14 @@ public class DuplicateDetectionLog {
     private Long id;
 
     private Long ticketId;
-    private boolean duplicate;
-    private String ruleName;
-    private Long createdAt;
 
-    public DuplicateDetectionLog() {}
+    private String ruleName;
+
+    private boolean duplicateFound;
+
+    private LocalDateTime checkedAt;
+
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
@@ -32,14 +37,6 @@ public class DuplicateDetectionLog {
         this.ticketId = ticketId;
     }
 
-    public boolean isDuplicate() {
-        return duplicate;
-    }
-
-    public void setDuplicate(boolean duplicate) {
-        this.duplicate = duplicate;
-    }
-
     public String getRuleName() {
         return ruleName;
     }
@@ -48,11 +45,19 @@ public class DuplicateDetectionLog {
         this.ruleName = ruleName;
     }
 
-    public Long getCreatedAt() {
-        return createdAt;
+    public boolean isDuplicateFound() {
+        return duplicateFound;
     }
 
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
+    public void setDuplicateFound(boolean duplicateFound) {
+        this.duplicateFound = duplicateFound;
+    }
+
+    public LocalDateTime getCheckedAt() {
+        return checkedAt;
+    }
+
+    public void setCheckedAt(LocalDateTime checkedAt) {
+        this.checkedAt = checkedAt;
     }
 }
