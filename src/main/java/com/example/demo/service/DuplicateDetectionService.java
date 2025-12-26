@@ -4,8 +4,6 @@ import com.example.demo.model.DuplicateDetectionLog;
 import java.util.List;
 
 public interface DuplicateDetectionService {
-
-    DuplicateDetectionLog detectDuplicate(Long ticketId);
-
-    List<DuplicateDetectionLog> getAllLogs();
+    void detectDuplicates(long ticketId);
+    List<DuplicateDetectionLog> getLogsForTicket(long ticketId);
 }
