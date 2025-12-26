@@ -31,7 +31,7 @@ public class DuplicateDetectionController {
     }
 
     @PutMapping("/{id}")
-    public DuplicateDetectionLog updateLog(@PathVariable Long id, @RequestBody DuplicateDetectionLog log) {
+    public DuplicateDetection updateLog(@PathVariable Long id, @RequestBody DuplicateDetection log) {
         log.setId(id);
         return logRepository.save(log);
     }
