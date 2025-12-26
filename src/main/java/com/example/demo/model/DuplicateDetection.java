@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "duplicate_detection_logs")
-public class DuplicateDetectionLog {
+public class DuplicateDetection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +28,9 @@ public class DuplicateDetectionLog {
         this.detectedAt = LocalDateTime.now();
     }
 
-    public DuplicateDetectionLog() {}
+    public DuplicateDetection() {}
 
-    public DuplicateDetectionLog(Ticket ticket, Ticket matchedTicket, Double matchScore) {
+    public DuplicateDetection(Ticket ticket, Ticket matchedTicket, Double matchScore) {
         this.ticket = ticket;
         this.matchedTicket = matchedTicket;
         this.matchScore = matchScore;

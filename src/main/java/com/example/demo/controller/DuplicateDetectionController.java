@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DuplicateDetectionLog;
-import com.example.demo.repository.DuplicateDetectionLogRepository;
+import com.example.demo.model.DuplicateDetection;
+import com.example.demo.repository.DuplicateDetectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,23 +10,23 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/duplicate-logs")
-public class DuplicateDetectionLogController {
+public class DuplicateDetectionController {
 
     @Autowired
-    private DuplicateDetectionLogRepository logRepository;
+    private DuplicateDetectionRepository logRepository;
 
     @GetMapping
-    public List<DuplicateDetectionLog> getAllLogs() {
+    public List<DuplicateDetection> getAllLogs() {
         return logRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<DuplicateDetectionLog> getLogById(@PathVariable Long id) {
+    public Optional<DuplicateDetection> getLogById(@PathVariable Long id) {
         return logRepository.findById(id);
     }
 
     @PostMapping
-    public DuplicateDetectionLog createLog(@RequestBody DuplicateDetectionLog log) {
+    public DuplicateDetection createLog(@RequestBody DuplicateDetection log) {
         return logRepository.save(log);
     }
 
