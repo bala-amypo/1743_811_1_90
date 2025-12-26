@@ -1,43 +1,28 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DuplicateDetection;
-import com.example.demo.repository.DuplicateDetectionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.DuplicateDetectionLog;
+import com.example.demo.service.DuplicateDetectionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/duplicate-logs")
+@RequestMapping("/api/duplicate-detection")
 public class DuplicateDetectionController {
 
-    @Autowired
-    private DuplicateDetectionRepository logRepository;
+    private final DuplicateDetectionService service;
 
-    @GetMapping
-    public List<DuplicateDetection> getAllLogs() {
-        return logRepository.findAll();
+    public DuplicateDetectionController(DuplicateDetectionService service) {
+        this.service = service;
     }
 
-    @GetMapping("/{id}")
-    public Optional<DuplicateDetection> getLogById(@PathVariable Long id) {
-        return logRepository.findById(id);
+    @PostMapping("/detect/{ticketId}")
+    public DuplicateDetectionLog detectDuplicate(@PathVariable Long ticketId) {
+        return service.detectDuplicate(ticketId);
     }
 
-    @PostMapping
-    public DuplicateDetection createLog(@RequestBody DuplicateDetection log) {
-        return logRepository.save(log);
-    }
-
-    @PutMapping("/{id}")
-    public DuplicateDetection updateLog(@PathVariable Long id, @RequestBody DuplicateDetection log) {
-        log.setId(id);
-        return logRepository.save(log);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteLog(@PathVariable Long id) {
-        logRepository.deleteById(id);
+    @GetMapping("/logs")
+    public List<DuplicateDetectionLog> getAllLogs() {
+        return service.getAllLogs();
     }
 }
