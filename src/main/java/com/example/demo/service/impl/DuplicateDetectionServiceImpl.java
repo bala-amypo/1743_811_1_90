@@ -1,33 +1,33 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DuplicateDetectionLog;
-import com.example.demo.repository.DuplicateDetectionLogRepository;
-import com.example.demo.service.DuplicateDetectionLogService;
+import com.example.demo.model.DuplicateDetection;
+import com.example.demo.repository.DuplicateDetectionRepository;
+import com.example.demo.service.DuplicateDetectionService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DuplicateDetectionLogServiceImpl implements DuplicateDetectionLogService {
+public class DuplicateDetectionServiceImpl implements DuplicateDetectionService {
 
-    private final DuplicateDetectionLogRepository logRepository;
+    private final DuplicateDetectionRepository logRepository;
 
-    public DuplicateDetectionLogServiceImpl(DuplicateDetectionLogRepository logRepository) {
+    public DuplicateDetectionServiceImpl(DuplicateDetectionRepository logRepository) {
         this.logRepository = logRepository;
     }
 
     @Override
-    public List<DuplicateDetectionLog> getAllLogs() {
+    public List<DuplicateDetection> getAllLogs() {
         return logRepository.findAll();
     }
 
     @Override
-    public Optional<DuplicateDetectionLog> getLogById(Long id) {
+    public Optional<DuplicateDetection> getLogById(Long id) {
         return logRepository.findById(id);
     }
 
     @Override
-    public DuplicateDetectionLog saveLog(DuplicateDetectionLog log) {
+    public DuplicateDetection saveLog(DuplicateDetection log) {
         return logRepository.save(log);
     }
 
