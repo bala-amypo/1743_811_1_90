@@ -1,10 +1,12 @@
 package com.example.demo.service;
-import java.util.List;
 
 import com.example.demo.model.DuplicateRule;
+import java.util.List;
+import java.util.Optional;
 
 public interface DuplicateRuleService {
-    DuplicateRule createRule(DuplicateRule rule);
     List<DuplicateRule> getAllRules();
-    DuplicateRule getRule(Long id);
+    Optional<DuplicateRule> getRuleById(Long id);
+    DuplicateRule saveRule(DuplicateRule rule);
+    void deleteRule(Long id);
 }
