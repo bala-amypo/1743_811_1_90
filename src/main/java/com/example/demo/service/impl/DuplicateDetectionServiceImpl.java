@@ -1,38 +1,31 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DuplicateDetection;
-import com.example.demo.repository.DuplicateDetectionRepository;
-import com.example.demo.service.DuplicateDetectionService;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
+
+import com.example.demo.model.DuplicateDetectionLog;
+import com.example.demo.repository.DuplicateDetectionLogRepository;
+import com.example.demo.service.DuplicateDetectionService;
 
 @Service
-public class DuplicateDetectionServiceImpl implements DuplicateDetectionService {
+public class DuplicateDetectionServiceImpl
+        implements DuplicateDetectionService {
 
-    private final DuplicateDetectionRepository logRepository;
+    private final DuplicateDetectionLogRepository repository;
 
-    public DuplicateDetectionServiceImpl(DuplicateDetectionRepository logRepository) {
-        this.logRepository = logRepository;
+    public DuplicateDetectionServiceImpl(
+            DuplicateDetectionLogRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<DuplicateDetection> getAllLogs() {
-        return logRepository.findAll();
-    }
+    public DuplicateDetectionLog detectDuplicates(Long ticketId) {
 
-    @Override
-    public Optional<DuplicateDetection> getLogById(Long id) {
-        return logRepository.findById(id);
-    }
+        DuplicateDetectionLog log = new DuplicateDetectionLog();
+        log.setTicketId(ticketId);
+        log.setDuplicate(true);
+        log.setRuleName("BASIC_RULE");
+        log.setCreatedAt(System.currentTimeMillis());
 
-    @Override
-    public DuplicateDetection saveLog(DuplicateDetection log) {
-        return logRepository.save(log);
-    }
-
-    @Override
-    public void deleteLog(Long id) {
-        logRepository.deleteById(id);
+        return repository.save(log);
     }
 }
