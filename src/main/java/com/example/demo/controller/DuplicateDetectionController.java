@@ -1,36 +1,43 @@
 package com.example.demo.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.model.DuplicateDetectionLog;
+import com.example.demo.repository.DuplicateDetectionLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.DuplicateDetectionLog;
-import com.example.demo.service.DuplicateDetectionService;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/detection")
-@Tag(name = "Duplicate Detection")
-public class DuplicateDetectionController {
+@RequestMapping("/duplicate-logs")
+public class DuplicateDetectionLogController {
 
-    private final DuplicateDetectionService detectionService;
+    @Autowired
+    private DuplicateDetectionLogRepository logRepository;
 
-    public DuplicateDetectionController(DuplicateDetectionService detectionService) {
-        this.detectionService = detectionService;
-    }
-
-    @GetMapping("/run/{ticketId}")
-    public List<DuplicateDetectionLog> runDetection(@PathVariable Long ticketId) {
-        return detectionService.detectDuplicates(ticketId);
-    }
-
-    @GetMapping("/ticket/{ticketId}")
-    public List<DuplicateDetectionLog> getLogsForTicket(@PathVariable Long ticketId) {
-        return detectionService.getLogsForTicket(ticketId);
+    @GetMapping
+    public List<DuplicateDetectionLog> getAllLogs() {
+        return logRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public DuplicateDetectionLog getLog(@PathVariable Long id) {
-        return detectionService.getLog(id);
+    public Optional<DuplicateDetectionLog> getLogById(@PathVariable Long id) {
+        return logRepository.findById(id);
+    }
+
+    @PostMapping
+    public DuplicateDetectionLog createLog(@RequestBody DuplicateDetectionLog log) {
+        return logRepository.save(log);
+    }
+
+    @PutMapping("/{id}")
+    public DuplicateDetectionLog updateLog(@PathVariable Long id, @RequestBody DuplicateDetectionLog log) {
+        log.setId(id);
+        return logRepository.save(log);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteLog(@PathVariable Long id) {
+        logRepository.deleteById(id);
     }
 }

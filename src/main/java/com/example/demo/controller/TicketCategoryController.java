@@ -1,36 +1,43 @@
 package com.example.demo.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.model.TicketCategory;
+import com.example.demo.repository.TicketCategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.TicketCategory;
-import com.example.demo.service.TicketCategoryService;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/categories")
-@Tag(name = "Category Management")
+@RequestMapping("/categories")
 public class TicketCategoryController {
 
-    private final TicketCategoryService categoryService;
+    @Autowired
+    private TicketCategoryRepository categoryRepository;
 
-    public TicketCategoryController(TicketCategoryService categoryService) {
-        this.categoryService = categoryService;
+    @GetMapping
+    public List<TicketCategory> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<TicketCategory> getCategoryById(@PathVariable Long id) {
+        return categoryRepository.findById(id);
     }
 
     @PostMapping
     public TicketCategory createCategory(@RequestBody TicketCategory category) {
-        return categoryService.createCategory(category);
+        return categoryRepository.save(category);
     }
 
-    @GetMapping
-    public List<TicketCategory> getAllCategories() {
-        return categoryService.getAllCategories();
+    @PutMapping("/{id}")
+    public TicketCategory updateCategory(@PathVariable Long id, @RequestBody TicketCategory category) {
+        category.setId(id);
+        return categoryRepository.save(category);
     }
 
-    @GetMapping("/{id}")
-    public TicketCategory getCategory(@PathVariable Long id) {
-        return categoryService.getCategory(id);
+    @DeleteMapping("/{id}")
+    public void deleteCategory(@PathVariable Long id) {
+        categoryRepository.deleteById(id);
     }
 }

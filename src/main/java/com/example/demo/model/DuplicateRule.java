@@ -3,27 +3,17 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "duplicate_rules")
+@Table(name = "duplicate_rule")
 public class DuplicateRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String ruleName;
-
-    private String matchType;
-
-    private Double threshold;
+    private String description;
 
     public DuplicateRule() {}
-
-    public DuplicateRule(String ruleName, String matchType, Double threshold) {
-        this.ruleName = ruleName;
-        this.matchType = matchType;
-        this.threshold = threshold;
-    }
 
     public Long getId() {
         return id;
@@ -41,19 +31,11 @@ public class DuplicateRule {
         this.ruleName = ruleName;
     }
 
-    public String getMatchType() {
-        return matchType;
+    public String getDescription() {
+        return description;
     }
 
-    public void setMatchType(String matchType) {
-        this.matchType = matchType;
-    }
-
-    public Double getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(Double threshold) {
-        this.threshold = threshold;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

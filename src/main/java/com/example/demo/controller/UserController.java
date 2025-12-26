@@ -1,37 +1,43 @@
 package com.example.demo.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
-@Tag(name = "User Management")
+@RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
-   
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
-    }
-
-    @GetMapping("/all")
+    @GetMapping
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return userRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUser(id);
+    public Optional<User> getUserById(@PathVariable Long id) {
+        return userRepository.findById(id);
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        user.setId(id);
+        return userRepository.save(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
     }
 }

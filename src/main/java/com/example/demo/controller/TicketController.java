@@ -1,41 +1,43 @@
 package com.example.demo.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.model.Ticket;
+import com.example.demo.repository.TicketRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.Ticket;
-import com.example.demo.service.TicketService;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/tickets")
-@Tag(name = "Ticket Management")
+@RequestMapping("/tickets")
 public class TicketController {
 
-    private final TicketService ticketService;
+    @Autowired
+    private TicketRepository ticketRepository;
 
-    public TicketController(TicketService ticketService) {
-        this.ticketService = ticketService;
-    }
-
-    @PostMapping("/{userId}/{categoryId}")
-    public Ticket createTicket(@PathVariable Long userId, @PathVariable Long categoryId, @RequestBody Ticket ticket) {
-        return ticketService.createTicket(userId, categoryId, ticket);
-    }
-
-    @GetMapping("/user/{userId}")
-    public List<Ticket> getTicketsByUser(@PathVariable Long userId) {
-        return ticketService.getTicketsByUser(userId);
-    }
-
-    @GetMapping("/all")
+    @GetMapping
     public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
+        return ticketRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Ticket getTicket(@PathVariable Long id) {
-        return ticketService.getTicket(id);
+    public Optional<Ticket> getTicketById(@PathVariable Long id) {
+        return ticketRepository.findById(id);
+    }
+
+    @PostMapping
+    public Ticket createTicket(@RequestBody Ticket ticket) {
+        return ticketRepository.save(ticket);
+    }
+
+    @PutMapping("/{id}")
+    public Ticket updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
+        ticket.setId(id);
+        return ticketRepository.save(ticket);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTicket(@PathVariable Long id) {
+        ticketRepository.deleteById(id);
     }
 }
