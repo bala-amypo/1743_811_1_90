@@ -1,43 +1,33 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userService.registerUser(user);
+    }
+
+    @GetMapping("/all")
+    public List<User> getAll() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id);
-    }
-
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
-    }
-
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
-        return userRepository.save(user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
+    public User get(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 }

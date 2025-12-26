@@ -1,43 +1,33 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DuplicateRule;
-import com.example.demo.repository.DuplicateRuleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.service.DuplicateRuleService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/duplicate-rules")
+@RequestMapping("/api/rules")
 public class DuplicateRuleController {
 
-    @Autowired
-    private DuplicateRuleRepository duplicateRuleRepository;
+    private final DuplicateRuleService ruleService;
 
-    @GetMapping
-    public List<DuplicateRule> getAllRules() {
-        return duplicateRuleRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<DuplicateRule> getRuleById(@PathVariable Long id) {
-        return duplicateRuleRepository.findById(id);
+    public DuplicateRuleController(DuplicateRuleService ruleService) {
+        this.ruleService = ruleService;
     }
 
     @PostMapping
-    public DuplicateRule createRule(@RequestBody DuplicateRule rule) {
-        return duplicateRuleRepository.save(rule);
+    public DuplicateRule create(@RequestBody DuplicateRule rule) {
+        return ruleService.createRule(rule);
     }
 
-    @PutMapping("/{id}")
-    public DuplicateRule updateRule(@PathVariable Long id, @RequestBody DuplicateRule rule) {
-        rule.setId(id);
-        return duplicateRuleRepository.save(rule);
+    @GetMapping
+    public List<DuplicateRule> getAll() {
+        return ruleService.getAllRules();
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteRule(@PathVariable Long id) {
-        duplicateRuleRepository.deleteById(id);
+    @GetMapping("/{id}")
+    public DuplicateRule get(@PathVariable Long id) {
+        return ruleService.getRule(id);
     }
 }

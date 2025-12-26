@@ -1,43 +1,42 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Ticket;
-import com.example.demo.repository.TicketRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.service.TicketService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/tickets")
+@RequestMapping("/api/tickets")
 public class TicketController {
 
-    @Autowired
-    private TicketRepository ticketRepository;
+    private final TicketService ticketService;
 
-    @GetMapping
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
+
+    @PostMapping("/{userId}/{categoryId}")
+    public Ticket create(
+            @PathVariable Long userId,
+            @PathVariable Long categoryId,
+            @RequestBody Ticket ticket) {
+
+        return ticketService.createTicket(userId, categoryId, ticket);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Ticket> byUser(@PathVariable Long userId) {
+        return ticketService.getTicketsByUser(userId);
+    }
+
+    @GetMapping("/all")
+    public List<Ticket> all() {
+        return ticketService.getAllTickets();
     }
 
     @GetMapping("/{id}")
-    public Optional<Ticket> getTicketById(@PathVariable Long id) {
-        return ticketRepository.findById(id);
-    }
-
-    @PostMapping
-    public Ticket createTicket(@RequestBody Ticket ticket) {
-        return ticketRepository.save(ticket);
-    }
-
-    @PutMapping("/{id}")
-    public Ticket updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
-        ticket.setId(id);
-        return ticketRepository.save(ticket);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteTicket(@PathVariable Long id) {
-        ticketRepository.deleteById(id);
+    public Ticket get(@PathVariable Long id) {
+        return ticketService.getTicket(id);
     }
 }

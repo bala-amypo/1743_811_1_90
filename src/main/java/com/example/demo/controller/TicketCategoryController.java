@@ -1,43 +1,33 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.TicketCategory;
-import com.example.demo.repository.TicketCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.service.TicketCategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 public class TicketCategoryController {
 
-    @Autowired
-    private TicketCategoryRepository categoryRepository;
+    private final TicketCategoryService categoryService;
 
-    @GetMapping
-    public List<TicketCategory> getAllCategories() {
-        return categoryRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<TicketCategory> getCategoryById(@PathVariable Long id) {
-        return categoryRepository.findById(id);
+    public TicketCategoryController(TicketCategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @PostMapping
-    public TicketCategory createCategory(@RequestBody TicketCategory category) {
-        return categoryRepository.save(category);
+    public TicketCategory create(@RequestBody TicketCategory category) {
+        return categoryService.createCategory(category);
     }
 
-    @PutMapping("/{id}")
-    public TicketCategory updateCategory(@PathVariable Long id, @RequestBody TicketCategory category) {
-        category.setId(id);
-        return categoryRepository.save(category);
+    @GetMapping
+    public List<TicketCategory> getAll() {
+        return categoryService.getAllCategories();
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id) {
-        categoryRepository.deleteById(id);
+    @GetMapping("/{id}")
+    public TicketCategory get(@PathVariable Long id) {
+        return categoryService.getCategory(id);
     }
 }
