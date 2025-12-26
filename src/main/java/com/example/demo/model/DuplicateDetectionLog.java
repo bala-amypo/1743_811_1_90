@@ -4,60 +4,50 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "duplicate_detection_log")
+@Table(name = "duplicate_detection_logs")
 public class DuplicateDetectionLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long ticketId;
+    @ManyToOne
+    private Ticket ticket;
 
-    private String ruleName;
+    @ManyToOne
+    private Ticket matchedTicket;
 
-    private boolean duplicateFound;
+    private Double matchScore;
 
-    private LocalDateTime checkedAt;
+    private LocalDateTime detectedAt;
 
-    // ===== GETTERS & SETTERS =====
+    public DuplicateDetectionLog() {}
 
-    public Long getId() {
-        return id;
+    public DuplicateDetectionLog(Ticket ticket, Ticket matchedTicket, Double matchScore) {
+        this.ticket = ticket;
+        this.matchedTicket = matchedTicket;
+        this.matchScore = matchScore;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PrePersist
+    public void onCreate() {
+        if (detectedAt == null) detectedAt = LocalDateTime.now();
     }
 
-    public Long getTicketId() {
-        return ticketId;
-    }
+    // ---- getters & setters ----
 
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getRuleName() {
-        return ruleName;
-    }
+    public Ticket getTicket() { return ticket; }
+    public void setTicket(Ticket ticket) { this.ticket = ticket; }
 
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
+    public Ticket getMatchedTicket() { return matchedTicket; }
+    public void setMatchedTicket(Ticket matchedTicket) { this.matchedTicket = matchedTicket; }
 
-    public boolean isDuplicateFound() {
-        return duplicateFound;
-    }
+    public Double getMatchScore() { return matchScore; }
+    public void setMatchScore(Double matchScore) { this.matchScore = matchScore; }
 
-    public void setDuplicateFound(boolean duplicateFound) {
-        this.duplicateFound = duplicateFound;
-    }
-
-    public LocalDateTime getCheckedAt() {
-        return checkedAt;
-    }
-
-    public void setCheckedAt(LocalDateTime checkedAt) {
-        this.checkedAt = checkedAt;
-    }
+    public LocalDateTime getDetectedAt() { return detectedAt; }
+    public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
 }
