@@ -21,7 +21,8 @@ public class TicketCategory {
 
     private String description;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
 
     // One-to-many relationship with Ticket (inverse side)
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,10 +38,7 @@ public class TicketCategory {
         this.description = description;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
+    
 
     // Getters and setters
     public Long getId() {

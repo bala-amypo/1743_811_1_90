@@ -26,9 +26,9 @@ public class User {
     @Size(min = 8)
     private String password;
 
-    private String role;
+    private String role="USER";
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt= LocalDateTime.now();
 
     public User() {
     }
@@ -40,13 +40,7 @@ public class User {
         this.role = role;
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (this.role == null) {
-            this.role = "USER";
-        }
-        this.createdAt = LocalDateTime.now();
-    }
+    
 
     // ===== GETTERS =====
 

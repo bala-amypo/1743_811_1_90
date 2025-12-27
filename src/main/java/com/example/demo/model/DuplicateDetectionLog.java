@@ -19,7 +19,8 @@ public class DuplicateDetectionLog {
 
     private Double matchScore;
 
-    private LocalDateTime detectedAt;
+    private LocalDateTime detectedAt = LocalDateTime.now();
+
 
     public DuplicateDetectionLog() {}
 
@@ -29,10 +30,7 @@ public class DuplicateDetectionLog {
         this.matchScore = matchScore;
     }
 
-    @PrePersist
-    public void onCreate() {
-        if (detectedAt == null) detectedAt = LocalDateTime.now();
-    }
+    
 
     // ---- getters & setters ----
 
