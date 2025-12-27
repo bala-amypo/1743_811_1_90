@@ -12,6 +12,7 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository userRepository;
     private final TicketCategoryRepository categoryRepository;
 
+    // REQUIRED BY TESTS
     public TicketServiceImpl(
             TicketRepository ticketRepository,
             UserRepository userRepository,
@@ -24,8 +25,14 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket createTicket(Long userId, Long categoryId, Ticket ticket) {
+
+        if (ticket.getDescription() == null || ticket.getDescription().length() < 10) {
+            throw new RuntimeException("Description too short");
+        }
+
         ticket.setUser(userRepository.findById(userId).orElseThrow());
         ticket.setCategory(categoryRepository.findById(categoryId).orElseThrow());
+
         return ticketRepository.save(ticket);
     }
 
