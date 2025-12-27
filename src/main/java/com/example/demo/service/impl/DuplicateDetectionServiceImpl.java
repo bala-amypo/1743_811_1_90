@@ -1,27 +1,36 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.model.DuplicateDetectionLog;
+import com.example.demo.repository.DuplicateDetectionLogRepository;
+import com.example.demo.service.DuplicateDetectionService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
-@RequiredArgsConstructor
 public class DuplicateDetectionServiceImpl implements DuplicateDetectionService {
 
-    private final TicketRepository ticketRepository;
-    private final DuplicateDetectionLogRepository logRepository;
-    private final DuplicateRuleRepository ruleRepository;
+    private final DuplicateDetectionLogRepository repository;
 
-    @Override
-    public void detectDuplicates(long ticketId) {
-        Ticket base = ticketRepository.findById(ticketId).orElseThrow();
-        List<Ticket> openTickets = ticketRepository.findByStatus("OPEN");
-
-        for (Ticket other : openTickets) {
-            if (!other.getId().equals(base.getId())) {
-                DuplicateDetectionLog log =
-                        new DuplicateDetectionLog(base, other, 0.8);
-                logRepository.save(log);
-            }
-        }
+    public DuplicateDetectionServiceImpl(DuplicateDetectionLogRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<DuplicateDetectionLog> getLogsForTicket(long ticketId) {
-        return logRepository.findByTicket_Id(ticketId);
+    public List<DuplicateDetectionLog> detectDuplicates(Long ticketId) {
+        // For now, simply return existing logs for the ticket
+        return repository.findByTicket_Id(ticketId);
+    }
+
+    @Override
+    public List<DuplicateDetectionLog> getLogsForTicket(Long ticketId) {
+        return repository.findByTicket_Id(ticketId);
+    }
+
+    @Override
+    public DuplicateDetectionLog getLog(Long id) {
+        return repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Duplicate log not found")
+        );
     }
 }

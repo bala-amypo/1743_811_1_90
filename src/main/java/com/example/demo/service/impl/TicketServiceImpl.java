@@ -1,19 +1,47 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.Ticket;
+import com.example.demo.model.TicketCategory;
+import com.example.demo.model.User;
+import com.example.demo.repository.TicketCategoryRepository;
 import com.example.demo.repository.TicketRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.TicketService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
+    private final TicketCategoryRepository categoryRepository;
 
-    public TicketServiceImpl(TicketRepository ticketRepository) {
+    public TicketServiceImpl(TicketRepository ticketRepository,
+                             UserRepository userRepository,
+                             TicketCategoryRepository categoryRepository) {
         this.ticketRepository = ticketRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Override
+    public Ticket createTicket(Long userId, Long categoryId, Ticket ticket) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+        TicketCategory category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new RuntimeException("Category not found")
+        );
+        ticket.setUser(user);
+        ticket.setCategory(category);
+        return ticketRepository.save(ticket);
+    }
+
+    @Override
+    public List<Ticket> getTicketsByUser(Long userId) {
+        return ticketRepository.findByUser_Id(userId);
     }
 
     @Override
@@ -22,17 +50,9 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Optional<Ticket> getTicketById(Long id) {
-        return ticketRepository.findById(id);
-    }
-
-    @Override
-    public Ticket saveTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
-    }
-
-    @Override
-    public void deleteTicket(Long id) {
-        ticketRepository.deleteById(id);
+    public Ticket getTicket(Long id) {
+        return ticketRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Ticket not found")
+        );
     }
 }
