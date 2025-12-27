@@ -4,35 +4,35 @@ import com.example.demo.model.TicketCategory;
 import com.example.demo.repository.TicketCategoryRepository;
 import com.example.demo.service.TicketCategoryService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TicketCategoryServiceImpl implements TicketCategoryService {
 
-    private final TicketCategoryRepository categoryRepository;
+    private final TicketCategoryRepository repository;
 
-    public TicketCategoryServiceImpl(TicketCategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public TicketCategoryServiceImpl(TicketCategoryRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public TicketCategory createCategory(TicketCategory category) {
+        if (repository.existsByCategoryName(category.getCategoryName())) {
+            throw new IllegalArgumentException("Category already exists");
+        }
+        return repository.save(category);
     }
 
     @Override
     public List<TicketCategory> getAllCategories() {
-        return categoryRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
-    public Optional<TicketCategory> getCategoryById(Long id) {
-        return categoryRepository.findById(id);
-    }
-
-    @Override
-    public TicketCategory saveCategory(TicketCategory category) {
-        return categoryRepository.save(category);
-    }
-
-    @Override
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+    public TicketCategory getCategory(Long id) {
+        return repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Category not found")
+        );
     }
 }
