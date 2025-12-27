@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "duplicate_detection_logs")
 public class DuplicateDetectionLog {
 
     @Id
@@ -13,21 +14,40 @@ public class DuplicateDetectionLog {
     @ManyToOne
     private Ticket ticket;
 
-    private double matchScore;
+    @ManyToOne
+    private Ticket matchedTicket;
+
+    private Double matchScore;
+
     private LocalDateTime detectedAt;
 
-    public DuplicateDetectionLog() {
-        this.detectedAt = LocalDateTime.now();
+    public DuplicateDetectionLog() {}
+
+    public DuplicateDetectionLog(Ticket ticket, Ticket matchedTicket, Double matchScore) {
+        this.ticket = ticket;
+        this.matchedTicket = matchedTicket;
+        this.matchScore = matchScore;
     }
 
-    public DuplicateDetectionLog(Ticket t1, Ticket t2, double score) {
-        this.ticket = t1;
-        this.matchScore = score;
-        this.detectedAt = LocalDateTime.now();
+    @PrePersist
+    public void onCreate() {
+        if (detectedAt == null) detectedAt = LocalDateTime.now();
     }
 
-    public double getMatchScore() { return matchScore; }
-    public void setMatchScore(double matchScore) { this.matchScore = matchScore; }
+    // ---- getters & setters ----
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Ticket getTicket() { return ticket; }
+    public void setTicket(Ticket ticket) { this.ticket = ticket; }
+
+    public Ticket getMatchedTicket() { return matchedTicket; }
+    public void setMatchedTicket(Ticket matchedTicket) { this.matchedTicket = matchedTicket; }
+
+    public Double getMatchScore() { return matchScore; }
+    public void setMatchScore(Double matchScore) { this.matchScore = matchScore; }
 
     public LocalDateTime getDetectedAt() { return detectedAt; }
+    public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
 }
