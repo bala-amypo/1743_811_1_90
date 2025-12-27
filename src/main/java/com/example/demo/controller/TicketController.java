@@ -25,4 +25,9 @@ public class TicketController {
     public Ticket createTicket(@RequestBody Ticket ticket) {
         return ticketRepository.save(ticket);
     }
+
+    @GetMapping("/user/{userId}")
+    public List<Ticket> getTicketsByUser(@PathVariable Long userId) {
+        return ticketRepository.findByUser_Id(userId);
+    }
 }
