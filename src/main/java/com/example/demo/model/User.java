@@ -26,7 +26,7 @@ public class User {
     @Size(min = 8)
     private String password;
 
-    private String role="USER";
+    private String role;
 
     private LocalDateTime createdAt= LocalDateTime.now();
 
@@ -37,6 +37,9 @@ public class User {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
+        if(role==null){
+        this.role="USER";}
+        else
         this.role = role;
     }
 
