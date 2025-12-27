@@ -1,85 +1,56 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "ticket_categories", 
-       uniqueConstraints = @UniqueConstraint(columnNames = "categoryName"))
-public class TicketCategory {
-
+@Table(name = "tickets")
+public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String categoryName;
-
+    private String title;
     private String description;
 
-    private LocalDateTime createdAt;
+    @ManyToOne
+    private TicketCategory category;
 
-    // One-to-many relationship with Ticket (inverse side)
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    @ManyToOne
+    private User createdBy;
 
-    // No-arg constructor
-    public TicketCategory() {
-    }
+    public Ticket() {}
 
-    // Parameterized constructor
-    public TicketCategory(String categoryName, String description) {
-        this.categoryName = categoryName;
-        this.description = description;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Ticket(Long id, String title, String description, TicketCategory category, User createdBy) {
         this.id = id;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
+        this.title = title;
         this.description = description;
+        this.category = category;
+        this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
+    public TicketCategory getCategory() { return category; }
+    public void setCategory(TicketCategory category) { this.category = category; }
+
+    public User getCreatedBy() { return createdBy; }
+    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", category=" + (category != null ? category.getName() : null) +
+                ", createdBy=" + (createdBy != null ? createdBy.getUsername() : null) +
+                '}';
     }
 }
