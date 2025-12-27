@@ -42,7 +42,7 @@ public class DuplicateDetectionServiceImpl implements DuplicateDetectionService 
         for (DuplicateRule rule : rules) {
             for (Ticket candidate : openTickets) {
 
-                if (candidate.getId().equals(base.getId())) continue;
+                if (candidate==base) continue;
 
                 double score = 0.0;
                 boolean isDuplicate = false;
