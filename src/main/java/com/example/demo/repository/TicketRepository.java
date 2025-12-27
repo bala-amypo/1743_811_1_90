@@ -5,5 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    List<Ticket> findByUser_Id(Long userId); // now works
+
+    List<Ticket> findByStatus(String status);
+    List<Ticket> findByCategory_Id(Long categoryId);
+    List<Ticket> findByUser_Id(Long userId);
+
+    List<Ticket> findBySubjectContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            String subject,
+            String description
+    );
 }

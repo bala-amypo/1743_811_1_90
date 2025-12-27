@@ -1,9 +1,11 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class DuplicateDetectionLog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -11,21 +13,21 @@ public class DuplicateDetectionLog {
     @ManyToOne
     private Ticket ticket;
 
-    private boolean duplicateFound;
+    private double matchScore;
+    private LocalDateTime detectedAt;
 
-    public DuplicateDetectionLog() {}
-
-    public DuplicateDetectionLog(Ticket ticket, boolean duplicateFound) {
-        this.ticket = ticket;
-        this.duplicateFound = duplicateFound;
+    public DuplicateDetectionLog() {
+        this.detectedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public DuplicateDetectionLog(Ticket t1, Ticket t2, double score) {
+        this.ticket = t1;
+        this.matchScore = score;
+        this.detectedAt = LocalDateTime.now();
+    }
 
-    public Ticket getTicket() { return ticket; }
-    public void setTicket(Ticket ticket) { this.ticket = ticket; }
+    public double getMatchScore() { return matchScore; }
+    public void setMatchScore(double matchScore) { this.matchScore = matchScore; }
 
-    public boolean isDuplicateFound() { return duplicateFound; }
-    public void setDuplicateFound(boolean duplicateFound) { this.duplicateFound = duplicateFound; }
+    public LocalDateTime getDetectedAt() { return detectedAt; }
 }
