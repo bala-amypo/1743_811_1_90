@@ -1,29 +1,28 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
+import com.example.demo.model.Ticket;
+import com.example.demo.repository.TicketRepository;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-public class Ticket {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
+import java.util.List;
 
-    @ManyToOne
-    private TicketCategory category;
+@RestController
+@RequestMapping("/tickets")
+public class TicketController {
 
-    public Ticket() {}
-    public Ticket(String title, TicketCategory category) {
-        this.title = title;
-        this.category = category;
+    private final TicketRepository ticketRepository;
+
+    public TicketController(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @GetMapping
+    public List<Ticket> getAllTickets() {
+        return ticketRepository.findAll();
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public TicketCategory getCategory() { return category; }
-    public void setCategory(TicketCategory category) { this.category = category; }
+    @PostMapping
+    public Ticket createTicket(@RequestBody Ticket ticket) {
+        return ticketRepository.save(ticket);
+    }
 }
