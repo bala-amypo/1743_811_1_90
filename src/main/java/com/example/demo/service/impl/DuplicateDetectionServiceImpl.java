@@ -7,7 +7,9 @@ import com.example.demo.util.TextSimilarityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DuplicateDetectionServiceImpl implements DuplicateDetectionService {
 
     private final TicketRepository ticketRepository;

@@ -5,7 +5,9 @@ import com.example.demo.repository.*;
 import com.example.demo.service.TicketService;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
