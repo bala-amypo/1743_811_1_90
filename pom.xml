@@ -136,10 +136,7 @@
         <plugins>
 
             <!-- Spring Boot -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            
 
             <!-- Maven Surefire for TestNG -->
             <plugin>
