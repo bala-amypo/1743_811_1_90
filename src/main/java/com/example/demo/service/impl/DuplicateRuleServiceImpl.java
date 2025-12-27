@@ -25,4 +25,13 @@ public class DuplicateRuleServiceImpl implements DuplicateRuleService {
         return ruleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rule not found"));
     }
+    @Override
+    public List<DuplicateRule> getAllRules() {
+        return ruleRepository.findAll();
+    }
+
+    @Override
+    public void deleteRule(Long id) {
+        ruleRepository.deleteById(id);
+    }
 }

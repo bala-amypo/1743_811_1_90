@@ -72,4 +72,9 @@ public class DuplicateDetectionServiceImpl implements DuplicateDetectionService 
     public List<DuplicateDetectionLog> getLogsForTicket(Long ticketId) {
         return logRepository.findByTicket_Id(ticketId);
     }
+    @Override
+    public List<DuplicateDetectionLog> detectDuplicate(Long ticketId) {
+        return detectDuplicates(ticketId);
+    }
+
 }
