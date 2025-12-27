@@ -1,38 +1,20 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.model.TicketCategory;
-import com.example.demo.service.TicketCategoryService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
 
-import java.util.List;
+@Entity
+public class TicketCategory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
 
-@RestController
-@RequestMapping("/api/categories")
-@RequiredArgsConstructor
-public class TicketCategoryController {
+    public TicketCategory() {}
+    public TicketCategory(String name) { this.name = name; }
 
-    private final TicketCategoryService categoryService;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @PostMapping
-    public ResponseEntity<TicketCategory> createCategory(@RequestBody TicketCategory category) {
-        return ResponseEntity.ok(categoryService.createCategory(category));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<TicketCategory> getCategory(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.getCategory(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<TicketCategory>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }
