@@ -39,8 +39,8 @@ public class User {
         this.password = password;
         if(role==null){
         this.role="USER";}
-        else
-        this.role = role;
+        else{
+        this.role = role;}
     }
 
     
