@@ -21,6 +21,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(User user) {
 
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("email already exists");
         }
@@ -29,9 +33,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Password must be at least 8 characters");
         }
 
-        if (user.getRole() == null) user.setRole("USER");
+        // 🔴 REQUIRED FOR TESTS (constructor usage, no JPA lifecycle)
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
 
-        if (user.getCreatedAt() == null) user.setCreatedAt(LocalDateTime.now());
+        if (user.getCreatedAt() == null) {
+            user.setCreatedAt(LocalDateTime.now());
+        }
 
         return userRepository.save(user);
     }
