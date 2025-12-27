@@ -1,13 +1,15 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DuplicateDetectionService;
 import com.example.demo.util.TextSimilarityUtil;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class DuplicateDetectionServiceImpl implements DuplicateDetectionService {
@@ -29,53 +31,75 @@ public class DuplicateDetectionServiceImpl implements DuplicateDetectionService 
     @Override
     public List<DuplicateDetectionLog> detectDuplicates(Long ticketId) {
 
-        Ticket base = ticketRepository.findById(ticketId).orElseThrow();
+        Ticket base = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new NotFoundException("Ticket not found"));
+
         List<DuplicateRule> rules = ruleRepository.findAll();
         List<Ticket> openTickets = ticketRepository.findByStatus("OPEN");
 
         List<DuplicateDetectionLog> results = new ArrayList<>();
 
-        for (Ticket other : openTickets) {
-            if (other.getId() != null && other.getId().equals(base.getId())) continue;
+        for (DuplicateRule rule : rules) {
+            for (Ticket candidate : openTickets) {
 
-            for (DuplicateRule rule : rules) {
+                if (candidate.getId().equals(base.getId())) continue;
 
                 double score = 0.0;
+                boolean isDuplicate = false;
 
-                if ("EXACT_MATCH".equals(rule.getMatchType())) {
-                    if (base.getSubject() != null &&
-                        base.getSubject().equalsIgnoreCase(other.getSubject())) {
-                        score = 1.0;
-                    }
+                switch (rule.getMatchType()) {
+                    case "EXACT_MATCH":
+                        if (base.getSubject().equalsIgnoreCase(candidate.getSubject())) {
+                            score = 1.0;
+                            isDuplicate = true;
+                        }
+                        break;
+
+                    case "KEYWORD":
+                        String[] b = (base.getSubject() + " " + base.getDescription())
+                                .toLowerCase().split("\\W+");
+                        String[] c = (candidate.getSubject() + " " + candidate.getDescription())
+                                .toLowerCase().split("\\W+");
+
+                        int common = 0;
+                        for (String x : b)
+                            for (String y : c)
+                                if (!x.isBlank() && x.equals(y)) common++;
+
+                        score = (double) common / Math.max(1, b.length);
+                        isDuplicate = score >= rule.getThreshold();
+                        break;
+
+                    case "SIMILARITY":
+                        score = TextSimilarityUtil.similarity(
+                                base.getDescription(),
+                                candidate.getDescription()
+                        );
+                        isDuplicate = score >= rule.getThreshold();
+                        break;
                 }
 
-                if ("KEYWORD".equals(rule.getMatchType())
-                        || "SIMILARITY".equals(rule.getMatchType())) {
-
-                    score = TextSimilarityUtil.similarity(
-                            base.getSubject() + " " + base.getDescription(),
-                            other.getSubject() + " " + other.getDescription()
-                    );
-                }
-
-                if (score >= rule.getThreshold()) {
+                if (isDuplicate) {
                     DuplicateDetectionLog log =
-                            new DuplicateDetectionLog(base, other, score);
-                    results.add(logRepository.save(log));
+                            new DuplicateDetectionLog(base, candidate, score);
+                    log.setDetectedAt(LocalDateTime.now());
+                    logRepository.save(log);
+                    results.add(log);
                 }
             }
         }
-        return results;
-    }
 
-    // ✅ Alias for controller
-    @Override
-    public List<DuplicateDetectionLog> detectDuplicate(Long ticketId) {
-        return detectDuplicates(ticketId);
+        return results;
     }
 
     @Override
     public List<DuplicateDetectionLog> getLogsForTicket(Long ticketId) {
         return logRepository.findByTicket_Id(ticketId);
+    }
+
+    @Override
+    public DuplicateDetectionLog getLog(Long id) {
+        return logRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Log not found"));
     }
 }
