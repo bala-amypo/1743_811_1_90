@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor as expected by test cases
+    // Constructor matching the tests
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -38,12 +38,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

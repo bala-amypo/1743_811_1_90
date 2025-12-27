@@ -6,14 +6,13 @@ import com.example.demo.service.DuplicateDetectionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DuplicateDetectionServiceImpl implements DuplicateDetectionService {
 
     private final DuplicateDetectionLogRepository duplicateDetectionLogRepository;
 
-    // Constructor as expected by test cases
+    // Constructor matching the tests
     public DuplicateDetectionServiceImpl(DuplicateDetectionLogRepository duplicateDetectionLogRepository) {
         this.duplicateDetectionLogRepository = duplicateDetectionLogRepository;
     }
@@ -24,8 +23,8 @@ public class DuplicateDetectionServiceImpl implements DuplicateDetectionService 
     }
 
     @Override
-    public Optional<DuplicateDetectionLog> getLogById(Long id) {
-        return duplicateDetectionLogRepository.findById(id);
+    public DuplicateDetectionLog getLog(Long id) {
+        return duplicateDetectionLogRepository.findById(id).orElse(null);
     }
 
     @Override
