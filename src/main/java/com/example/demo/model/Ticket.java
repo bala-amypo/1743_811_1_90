@@ -33,12 +33,15 @@ public class Ticket {
     @OneToMany(mappedBy = "matchedTicket")
     private List<DuplicateDetectionLog> matchedLogs;
 
-    public Ticket() {}
+   
 
     @PrePersist
     public void onCreate() {
         if (createdAt == null) createdAt = LocalDateTime.now();
         if (status == null) status = "OPEN";
+    }
+    public Ticket() {
+        if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
     // ---- getters & setters ----
