@@ -16,7 +16,7 @@ public class DuplicateDetectionController {
     private final DuplicateDetectionService detectionService;
 
     @PostMapping("/detect/{ticketId}")
-    public ResponseEntity<DuplicateDetectionLog> detect(@PathVariable Long ticketId) {
+    public ResponseEntity<List<DuplicateDetectionLog>> detect(@PathVariable Long ticketId) {
         return ResponseEntity.ok(detectionService.detectDuplicate(ticketId));
     }
 
