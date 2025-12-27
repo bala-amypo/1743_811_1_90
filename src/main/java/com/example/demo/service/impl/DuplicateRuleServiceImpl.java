@@ -3,25 +3,25 @@ package com.example.demo.service.impl;
 import com.example.demo.model.DuplicateRule;
 import com.example.demo.repository.DuplicateRuleRepository;
 import com.example.demo.service.DuplicateRuleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DuplicateRuleServiceImpl implements DuplicateRuleService {
 
     private final DuplicateRuleRepository repository;
 
-    public DuplicateRuleServiceImpl(DuplicateRuleRepository repository) {
-        this.repository = repository;
+    @Override
+    public DuplicateRule createRule(DuplicateRule rule) {
+        return repository.save(rule);
     }
 
     @Override
-    public DuplicateRule createRule(DuplicateRule rule) {
-        if (repository.findByRuleName(rule.getRuleName()).isPresent()) {
-            throw new IllegalArgumentException("Rule already exists");
-        }
-        return repository.save(rule);
+    public DuplicateRule getRule(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
@@ -30,9 +30,7 @@ public class DuplicateRuleServiceImpl implements DuplicateRuleService {
     }
 
     @Override
-    public DuplicateRule getRule(Long id) {
-        return repository.findById(id).orElseThrow(
-                () -> new RuntimeException("Rule not found")
-        );
+    public void deleteRule(Long id) {
+        repository.deleteById(id);
     }
 }
